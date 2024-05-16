@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+    color: white;
+}
+
+.title {
+    text-align: center;
+}
+
+h2 {
+    margin: 0;
+}
+
+main {
+    background-color: brown;
+    border: 2px solid black;
+}
+
+.player1-board {
+    background-color: #520808;
+    color: white;
+    padding: 10px 20px 30px 20px;
+}
+
+.player2-board {
+    background-color: #520808;
+    color: white;
+    padding: 10px 20px 30px 20px;
+}
+
+.dice-board {
+    padding: 10px 20px 30px 20px;
+}
+
+.dice-board h2, p {
+    text-align: center;
+}
+
+.dices-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
+.dice {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 32px;
+    text-align: center;
+    box-sizing: border-box;
+    min-width: 50px;
+    min-height: 50px;
+    padding: 3px;
+    border: 3px solid white;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.roll-button {
+    background-color: #520808;
+    color: white;
+    font-size: 2em;
+    border-radius: 3px;
+    margin: auto;
+}
+
+.player-name {
+    text-align: center;
+}
+
+.health-text {
+    text-align: center;
+}
+
+.health-bar {
+    min-height: 20px;
+    display: flex;
+    width: 70%;
+    margin: auto;
+    justify-content: space-evenly;
+    box-shadow: 0px 0px 1px;
+}
+
+.gap {
+    border: 1px solid black;
+    flex: 1;
+    background-color: red;
+    color: white;
+}
