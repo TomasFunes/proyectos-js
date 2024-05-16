@@ -2,6 +2,7 @@ const dice1 = document.querySelector('.dice.one');
 const dice2 = document.querySelector('.dice.two');
 const rollBtn = document.querySelector('.roll-button');
 const rollsLog = document.querySelector('.rolls');
+const turnIndicator = document.querySelector('.current-turn');
 
 const playerOneHealthText = document.querySelector('.player1.health-text');
 const playerOneHealthBar = document.querySelector('.player1.health-bar');
@@ -55,6 +56,8 @@ rollBtn.addEventListener('click', () => {
         damageText.textContent = `Player ${(playerOneHealth === 0) ? '1' : '2'} wins!`; 
         rollsLog.insertAdjacentElement('afterbegin', damageText);
 
+    } else {
+        turnIndicator.textContent = `Player's ${currentTurn} turn`;
     }
 })
 
