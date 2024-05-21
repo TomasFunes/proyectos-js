@@ -1,0 +1,52 @@
+[
+    {
+        "name": "Product 1",
+        "price": 150,
+        "stock": 10
+    },
+    {
+        "name": "Product 2",
+        "price": 200,
+        "stock": 10
+    },
+    {
+        "name": "Product 3",
+        "price": 50,
+        "stock": 10
+    },
+    {
+        "name": "Product 4",
+        "price": 450,
+        "stock": 10
+    },
+    {
+        "name": "Product 5",
+        "price": 167.30,
+        "stock": 10
+    },
+    {
+        "name": "Product 6",
+        "price": 110,
+        "stock": 10
+    },
+    {
+        "name": "Product 7",
+        "price": 245.50,
+        "stock": 10
+    },
+    {
+        "name": "Product 8",
+        "price": 15.30,
+        "stock": 0
+    },
+    {
+        "name": "Product 9",
+        "price": 12.20,
+        "stock": 10
+    },
+    {
+        "name": "Product 10",
+        "price": 10,
+        "stock": 9
+    }
+]
