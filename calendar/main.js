@@ -1,63 +1,118 @@
-const date = document.querySelector('.date');
-const month = document.querySelector('.month');
-const leftArrow = document.querySelector('.left-arrow');
-const rightArrow = document.querySelector('.right-arrow');
+import { useState } from "./useState.js";
 
-const now = new Date();
-const currentDate = now.getDate();
-const currentMonth = now.getMonth();
-const currentYear = now.getFullYear();
-const firstDayOfMonth = getFirstDayOfMonth(currentMonth, currentYear);
+// Target is at first the current date, day, year, etc. But could change
+const [target, setTarget] = useState(new Date());
+const today = new Date();
+const cells = document.querySelectorAll('.date-table td');
+renderCalendar();
 
-month.textContent = monthMapping(currentMonth);
-date.textContent = now.toDateString();
-const numberOfDays = getNumberOfDays(currentMonth, currentYear);
-makeCalendar(firstDayOfMonth, numberOfDays);
-
-
-function monthMapping(month_num) {
-    const month_names = [
-        "January", "February", "March", "April",
-        "May", "June", "July", "August", "September",
-        "October", "November", "December"
-    ]
-    
-    return month_names[month_num];
+function renderCalendar() {
+    cleanDateTable();
+    renderMonthAndYear();
+    renderCurrentDate();
+    renderMonthDates();        
 }
 
-function getFirstDayOfMonth(month, year) {
-    const firstOfMonth = new Date(year, month);
-    return firstOfMonth.getDay();
-}
+const prevMonth = document.querySelector('.prev-month');
+const nexMonth = document.querySelector('.next-month');
 
-function getNumberOfDays(month, year) {
-    const numberOfDays = [
-        31, (year % 4 === 0) ? 29 : 28, 31,
-        30, 31, 30, 
-        31, 31, 30,
-        31, 30, 31
-    ]
+prevMonth.addEventListener('click', () => {
+    setTarget(new Date(target().getFullYear(), target().getMonth() - 1));
+    renderCalendar();    
+})
 
-    return numberOfDays[month];
-}
 
-function makeCalendar(firstDayOfMonth, numberOfDays) {
-    day_count = 1;
-    row = 0;
-    column = firstDayOfMonth;
+nexMonth.addEventListener('click', () => {
+    setTarget(new Date(target().getFullYear(), target().getMonth() + 1));
+    renderCalendar();    
+})
 
-    for (row; row < 5; row++) {
-        for(column; column < 7; column++) {
-            const box = document.querySelector(`.box-${row}${column}`);
-            if (day_count <= numberOfDays) {
-                box.textContent = day_count;
-                if(day_count === currentDate) {
-                    box.style.backgroundColor = 'green';
-                    box.style.color = 'white';
-                }
-            }
-            day_count++;
+for(const cell of cells) {
+    cell.addEventListener('click', () => {
+        cleanActiveDate();
+        if (cell.textContent) {
+            cell.classList.toggle('active-date');
         }
-        column = 0;
+    })
+}
+
+
+function renderMonthAndYear() {
+    const month = target().getMonth();
+    const year = target().getFullYear();
+    const monthElement = document.querySelector('.target-month');
+    monthElement.textContent = `${monthNumToString(month)} ${year}`;
+}
+
+function renderCurrentDate() {
+    const dateElement = document.querySelector('.current-date');
+    dateElement.textContent = today.toDateString();
+}
+
+function renderMonthDates() {
+    const month = target().getMonth();
+    const day = target().getDay();
+    const numOfDays = monthNumToDays(month);
+    let dateCounter = 1;
+
+    const cells = document.querySelectorAll('.date-table td');
+
+    for (let i = 0 + day; i < (day + numOfDays); i++) {
+        if(dateCounter === today.getDate() && target().getMonth() === today.getMonth() && target().getFullYear() === today.getFullYear()) {
+            cells[i].classList.toggle('current-day');
+        }
+        cells[i].textContent = dateCounter++;
     }
 }
+
+function monthNumToDays(monthNum) {
+    const isBis = (target().getFullYear() % 4 === 0);
+
+    const daysMapping = 
+    {
+        0: 31, 1: (isBis ? 29 : 28), 2: 31, 3: 30, 4: 31, 5: 30,
+        6: 31, 7: 31, 8: 30, 9: 31, 10: 30, 11: 31
+    };
+
+    return daysMapping[monthNum];
+}
+
+function monthNumToString(monthNum) {
+    const monthMapping = 
+    {0: 'January', 1: 'February', 2: 'March', 
+        3: 'April', 4: 'May', 5: 'June',
+        6: 'July', 7: 'August', 8: 'September',
+        9: 'October', 10: 'November', 11: 'December'
+    }
+
+    return monthMapping[monthNum];
+}
+
+function cleanDateTable() {
+    const cells = document.querySelectorAll('.date-table td');
+
+    for(const cell of cells) {
+        cell.textContent = "";
+
+        if (cell.classList.contains('current-day')) {
+            cell.classList.toggle('current-day');
+        }
+
+        cleanActiveDate();
+    }
+}
+
+function cleanActiveDate() {
+    const activeDate = document.querySelector('.active-date');
+
+    if (activeDate) {
+        activeDate.classList.remove('active-date');
+    }
+}
+
+/*      
+    Al clickear una celda del calendario
+
+    - El dia sera marcado como 'objetivo'. Ser 'objetivo' tiene prioridad sobre
+    ser 'actual'
+*/

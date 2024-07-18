@@ -1,80 +1,88 @@
+/* :root {
+    --no-margin: 0;
+} */
+
 body {
-    background-color: #f2a17e;
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
 }
 
-
-.title {
+header {
     text-align: center;
     background-color: black;
     color: white;
     margin:0;
-    padding: 10px;
+    padding: 5px;
 }
 
-.month{
-    text-align: center;
+.month {
+    display: flex;
+    align-items: center;
 }
 
 .date {
+    border-top: 2px solid black;
+    margin: auto;
     text-align: center;
 }
 
-.calendar-container {
-    width: 50%;
-    margin: auto;
-}
-
-
-.calendar-table {
-    table-layout: fixed;
-    width: 100%;
-    border: 2px solid black;
-    border-spacing: 0;
-    border-radius: 10px;
-    box-shadow: 0px 0px 3px ;
-}
-
-.calendar-table th, td {
-    width: 14.3%;
-    text-align: left;
-    padding: 8px;
-}
-
-.calendar-table th {
+.days {
     background-color: black;
     color: white;
 }
 
-.calendar-table td {
+.date-table {
+    table-layout: fixed;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.day {
     background-color: lightblue;
+    border: 1px solid grey;
+    padding: 8px 0 3.5em 0;
+}
+
+.day:hover {
+    opacity: 0.8;
 }
 
 .current-day {
-    background-color: green;
+    background-color:  green;
     color: white;
+} 
+
+.prev-arrow,
+.next-arrow {
+    display: block;
+    margin: auto;
+    align-self: center;
 }
 
-.left-triangle {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 20px 10px 0;
-    border-color: transparent #000000 transparent transparent;
-}
 
-.right-triangle {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 0 10px 20px;
-    border-color: transparent transparent transparent #000000;
-}
-
-.month-container {
+.prev-month,
+.next-month {
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+    flex: 1;
+    align-self: stretch;
+    
+}
+
+.target-month {
+    flex: 2.5;
+    text-align: center;
+}
+.next-month {
+    flex: 1;
+}
+
+.prev-month:hover,
+.next-month:hover {
+    background-color: lightblue;
+}
+
+.active-date {
+    background-color: purple;
+    color: white;
 }
