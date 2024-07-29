@@ -66,7 +66,7 @@ header {
 }
 
 
-.cart-container {
+.cart {
     position: fixed;
     background-color: #e0da67;
     right: 0;
@@ -88,7 +88,7 @@ h2 {
 }
 
 
-.products-container {
+.products {
     display: grid;
     padding: 10px 20px;
     gap: 40px;
@@ -96,7 +96,7 @@ h2 {
 }
 
 @media screen and (min-width: 840px) {
-    .products-container {
+    .products {
         grid-template-columns: 1fr 1fr;
     }
     
@@ -104,7 +104,7 @@ h2 {
 
 
 @media screen and (min-width: 1280px) {
-    .products-container {
+    .products {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }   

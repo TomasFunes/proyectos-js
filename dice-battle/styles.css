@@ -17,13 +17,7 @@ main {
     border: 2px solid black;
 }
 
-.player1-board {
-    background-color: #520808;
-    color: white;
-    padding: 10px 20px 30px 20px;
-}
-
-.player2-board {
+.player {
     background-color: #520808;
     color: white;
     padding: 10px 20px 30px 20px;

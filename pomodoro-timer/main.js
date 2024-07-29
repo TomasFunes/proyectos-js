@@ -1,26 +1,48 @@
-const timer = document.querySelector('.timer');
 const startPauseBtn = document.querySelector('.start');
 const reset = document.querySelector('.reset');
+const workCountdown = 0.05 * 60;
+const restCountdown = 0.05*60; 
 
-let countdown = 25 * 60 // In seconds
+
+const pomodoro = {
+    currentSession: "work",
+    countdown: workCountdown,
+    completedSessions: 0
+}
+
+
+
+function renderTimer() {
+    const timer = document.querySelector('.timer');
+    const cueText = document.querySelector('.cue-text');
+    const timerContainer = document.querySelector('.timer-container');
+    const sessionStatus = document.querySelector('.session-status');
+
+
+
+    if (pomodoro.completedSessions == 4) {
+        timerContainer.textContent = "All sessions completed";
+    } else {
+        sessionStatus.textContent = `Sessions completed:  ${pomodoro.completedSessions} / 4`;
+        cueText.textContent = (pomodoro.currentSession == "work") ? "Focus!" : "Rest";
+        timer.textContent = getMinutes(pomodoro.countdown);
+    }
+}
+
 let tickId;
 let timerId;
 
-startPauseBtn.addEventListener("click", () => {
-    if(startPauseBtn.classList.contains('start')){
-        timer.textContent = getHoursAndMinutes(countdown);
+renderTimer(pomodoro.countdown);
 
-        timerId = setTimeout(function timer() {
-            alert("Time's up!");
-            clearInterval(tickId);
-            startPauseBtn.className = 'start';
-            startPauseBtn.textContent = 'Start';
-            countdown = 25 * 60;
-        }, countdown * 1000 + 200);  // 50 ms added to prevent early clear
+
+startPauseBtn.addEventListener("click", () => {
+    
+    if(startPauseBtn.classList.contains('start')){       
+        startCountdown();
 
         tickId = setInterval(function tick() {
-            countdown--;
-            timer.textContent = getHoursAndMinutes(countdown);
+            pomodoro.countdown--;
+            renderTimer();           
         }, 1000)
 
 
@@ -37,21 +59,27 @@ startPauseBtn.addEventListener("click", () => {
 });
 
 reset.addEventListener("click", () => {
-    clearTimeout(timerId);        
-    clearInterval(tickId);
+    clearTimeout(timerId);
+    pomodoro.countdown = pomodoro.currentSession == "work" ? workCountdown : restCountdown;
+    startCountdown();
+    renderTimer();
 
-    countdown = 25 * 60;
-    timer.textContent = getHoursAndMinutes(countdown);
-
-    startPauseBtn.className = 'start'
-    startPauseBtn.textContent = 'Start';
 })
 
-
-
-
-function getHoursAndMinutes(countdown) {
+function getMinutes(countdown) {
     const minutes = Math.floor(countdown / 60);
     const seconds = (countdown % 60);
     return `${minutes} : ${(seconds < 10) ? "0" + seconds : seconds}`
+}
+
+function startCountdown() {
+    timerId = setTimeout(() => {
+        if (pomodoro.currentSession == "work") pomodoro.completedSessions++;
+        pomodoro.currentSession = (pomodoro.currentSession == "work") ? "rest" : "work";
+        pomodoro.countdown = pomodoro.currentSession == "work" ? workCountdown : restCountdown;
+        startPauseBtn.className = 'start';
+        startPauseBtn.textContent = 'Start';
+        clearInterval(tickId);
+        renderTimer();
+    }, pomodoro.countdown * 1000 + 200);  // 200 ms added to prevent early clear
 }

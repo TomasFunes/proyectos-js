@@ -1,6 +1,6 @@
 const cartBtn = document.querySelector('.cart-btn');
 const body = document.querySelector('body');
-const container = document.querySelector('.products-container');
+const container = document.querySelector('.products');
 
 
 let cartProducts = [];
@@ -10,7 +10,6 @@ const fetchProducts = async () => {
     let response = await fetch('./products.json');
     let products = await response.json();
 
-    console.log(products)
     for (const product of products) {
         const productContainer = document.createElement('div');
         const productName = document.createElement('h3');
@@ -50,6 +49,7 @@ const fetchProducts = async () => {
         btnDiv.append(addBtn);
 
         addForm.addEventListener('submit', (event) => {
+            // "En el JSON, cambiar el stock"
             event.preventDefault();
 
             cartProducts = cartProducts.filter(cartProduct => cartProduct.name !== product.name);
@@ -63,6 +63,7 @@ const fetchProducts = async () => {
                 }
             ]
         })
+
         // Other setup
         productName.textContent = `${product.name}`;
 
@@ -85,11 +86,11 @@ const fetchProducts = async () => {
 fetchProducts();
 
 cartBtn.addEventListener('click', () => {
-    let cart = document.querySelector('.cart-container');
+    let cart = document.querySelector('.cart');
 
-    if (cart === null) {
+    if (!cart) {
         cart = document.createElement('div');
-        cart.className = 'cart-container';
+        cart.className = 'cart';
         body.appendChild(cart);
     }
 

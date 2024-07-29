@@ -27,6 +27,16 @@ nexMonth.addEventListener('click', () => {
     renderCalendar();    
 })
 
+/* 
+  "Al clickear una celda:
+    - Borrar el calendario
+    - Borrar la flecha derecha
+    - Cambiar la fecha de hoy por la de la fecha seleccionada
+    - Mostrar eventos de esa fecha
+    - Agregar un boton para agregar un evento
+  "
+*/
+
 for(const cell of cells) {
     cell.addEventListener('click', () => {
         cleanActiveDate();
@@ -55,8 +65,6 @@ function renderMonthDates() {
     const numOfDays = monthNumToDays(month);
     let dateCounter = 1;
 
-    const cells = document.querySelectorAll('.date-table td');
-
     for (let i = 0 + day; i < (day + numOfDays); i++) {
         if(dateCounter === today.getDate() && target().getMonth() === today.getMonth() && target().getFullYear() === today.getFullYear()) {
             cells[i].classList.toggle('current-day');
@@ -68,24 +76,18 @@ function renderMonthDates() {
 function monthNumToDays(monthNum) {
     const isBis = (target().getFullYear() % 4 === 0);
 
-    const daysMapping = 
-    {
-        0: 31, 1: (isBis ? 29 : 28), 2: 31, 3: 30, 4: 31, 5: 30,
-        6: 31, 7: 31, 8: 30, 9: 31, 10: 30, 11: 31
-    };
+    const days = [31, (isBis ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-    return daysMapping[monthNum];
+    return days[monthNum];
 }
 
 function monthNumToString(monthNum) {
-    const monthMapping = 
-    {0: 'January', 1: 'February', 2: 'March', 
-        3: 'April', 4: 'May', 5: 'June',
-        6: 'July', 7: 'August', 8: 'September',
-        9: 'October', 10: 'November', 11: 'December'
-    }
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
 
-    return monthMapping[monthNum];
+    return months[monthNum];
 }
 
 function cleanDateTable() {
@@ -109,10 +111,3 @@ function cleanActiveDate() {
         activeDate.classList.remove('active-date');
     }
 }
-
-/*      
-    Al clickear una celda del calendario
-
-    - El dia sera marcado como 'objetivo'. Ser 'objetivo' tiene prioridad sobre
-    ser 'actual'
-*/
