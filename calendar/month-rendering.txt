@@ -1,0 +1,26 @@
+"Obtener el mes objetivo"
+"Obtener el numero de dias de ese mes"
+"Obtener el primer dia del mes"
+"Crear un contador de dias. Esto es igual al negativo del primer dia del mes (su indice)"
+
+"Crear la tabla"
+"Crear una fila para los headers"
+"Por cada dia de la semana:
+  - Crear una celda de header
+  - Colocarle como valor el dia de la semana correspondiente
+  - Anexar la celda a la fila
+  - Anexar la fila al calendario
+"
+
+"Mientras el contador de dias no exceda el numero de dias del mes: 
+  - Crear una fila (semana)
+  - Por cada dia de la semana:
+    - Crear una celda (fecha)
+    - Si el contador es mayor a 0 y menor o igual al numero de dias del mes:
+      - Agregar a la celda el valor del contador e incrementarlo
+    - Anexar la celda a la fila
+  - Anexar la fila al calendario
+"
+
+"Anexar el calendario al contenedor"
+

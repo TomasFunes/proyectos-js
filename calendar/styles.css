@@ -17,6 +17,16 @@ header {
     padding: 5px;
 }
 
+input,
+button {
+  font-family: inherit;
+  font-size: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box
+
+}
+
 .calendar {
     max-width: 920px;
     margin: auto;
@@ -48,6 +58,7 @@ header {
     background-color: lightblue;
     border: 1px solid grey;
     padding: 8px 0 3.5em 0;
+    position: relative;
 }
 
 .day:hover {
@@ -91,4 +102,33 @@ header {
 .active-date {
     background-color: purple;
     color: white;
+}
+
+input {
+    padding: 1rem 1rem;
+    font-size: 1.2rem;
+    flex: 2;
+    width: 80%;
+    margin: auto;
+}
+
+button {
+    padding: 1rem 1rem;
+    background-color: green;
+    border: 1px solid white;
+    color: white;
+    width: 80%;
+    display: block;
+    margin: auto;
+}
+
+.event-form {
+    box-sizing: border-box;
+    padding: 1rem;
+    width: 90%;
+    background-color: lightblue;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }

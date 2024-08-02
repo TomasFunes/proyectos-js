@@ -1,0 +1,9 @@
+"Al clickear una celda:
+  - Crear un elemento div
+  - Crear un boton
+  - Al clickear el boton:
+    - remover el div
+  - Colocar un mensaje en el div
+  - Anexar el boton al div
+  - Anexar el div a la celda
+"

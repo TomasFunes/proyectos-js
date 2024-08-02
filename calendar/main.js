@@ -1,46 +1,99 @@
-import { useState } from "./useState.js";
 
-// Target is at first the current date, day, year, etc. But could change
-const [target, setTarget] = useState(new Date());
 const today = new Date();
-const cells = document.querySelectorAll('.date-table td');
+let events = [];
+
+// Target is at first the current date. Then is the first of any month
+const targetDate = {
+    date: today.getDate(),
+    year: today.getFullYear(),
+    month: today.getMonth(),
+    day: today.getDay()
+}
+
+const calendar = document.querySelector('.date');
+const prevMonth = document.querySelector('.prev-month');
+const nexMonth = document.querySelector('.next-month');
 renderCalendar();
 
 function renderCalendar() {
-    cleanDateTable();
     renderMonthAndYear();
     renderCurrentDate();
-    renderMonthDates();        
+    renderMonthDates(); 
+    cleanActiveDate();   
 }
 
-const prevMonth = document.querySelector('.prev-month');
-const nexMonth = document.querySelector('.next-month');
 
 prevMonth.addEventListener('click', () => {
-    setTarget(new Date(target().getFullYear(), target().getMonth() - 1));
+    const prevMonth = new Date(targetDate.year, targetDate.month - 1)
+    targetDate.date = prevMonth,
+    targetDate.year = prevMonth.getFullYear(),
+    targetDate.month = prevMonth.getMonth(),
+    targetDate.day = prevMonth.getDay() 
     renderCalendar();    
 })
 
 
 nexMonth.addEventListener('click', () => {
-    setTarget(new Date(target().getFullYear(), target().getMonth() + 1));
+    const nextMonth = new Date(targetDate.year, targetDate.month + 1)
+    targetDate.date = nextMonth,
+    targetDate.year = nextMonth.getFullYear(),
+    targetDate.month = nextMonth.getMonth(),
+    targetDate.day = nextMonth.getDay() 
+
     renderCalendar();    
 })
 
-/* 
-  "Al clickear una celda:
-    - Borrar el calendario
-    - Borrar la flecha derecha
-    - Cambiar la fecha de hoy por la de la fecha seleccionada
-    - Mostrar eventos de esa fecha
-    - Agregar un boton para agregar un evento
-  "
-*/
 
-for(const cell of cells) {
+function addCellEvents (cell) {
     cell.addEventListener('click', () => {
+        
         cleanActiveDate();
         if (cell.textContent) {
+            const eventList = document.createElement('ul');
+            targetDate.date = cell.textContent;
+            const dateEvents = document.querySelector('.events');
+            
+            const addEventBtn = document.createElement('button');
+            addEventBtn.textContent = "Add event";
+            addEventBtn.classList = "add-event-btn";
+
+            addEventBtn.addEventListener('click', () => {
+                dateEvents.textContent = "";
+                renderEventForm()
+            });
+
+            dateEvents.textContent = "";
+
+            const targetEvents = events.map (e => {
+                if (e.year == targetDate.year 
+                    && e.month == targetDate.month 
+                    && e.date == targetDate.date){
+                        return e;
+                    }
+            })
+
+            if(targetEvents.length) {
+                const eventPara = document.createElement('p');
+                eventPara.textContent = `Events for ${targetDate.date}/${targetDate.month + 1}/${targetDate.year}:`
+                dateEvents.appendChild(eventPara);
+
+                for (const event of events) {
+                    if (event.year == targetDate.year 
+                    && event.month == targetDate.month 
+                    && event.date == targetDate.date){
+                        const eventItem = document.createElement('li');
+                        eventItem.textContent = event.description;
+                        eventList.appendChild(eventItem);
+                    }
+                }
+
+            } else {
+                eventList.textContent = `${targetDate.date}/${targetDate.month + 1}/${targetDate.year}: No events`
+            }
+            eventList.className = "event-list";
+
+            dateEvents.appendChild(eventList);
+            dateEvents.appendChild(addEventBtn);
             cell.classList.toggle('active-date');
         }
     })
@@ -48,10 +101,8 @@ for(const cell of cells) {
 
 
 function renderMonthAndYear() {
-    const month = target().getMonth();
-    const year = target().getFullYear();
     const monthElement = document.querySelector('.target-month');
-    monthElement.textContent = `${monthNumToString(month)} ${year}`;
+    monthElement.textContent = `${monthNumToString(targetDate.month)} ${targetDate.year}`;
 }
 
 function renderCurrentDate() {
@@ -59,22 +110,57 @@ function renderCurrentDate() {
     dateElement.textContent = today.toDateString();
 }
 
-function renderMonthDates() {
-    const month = target().getMonth();
-    const day = target().getDay();
-    const numOfDays = monthNumToDays(month);
-    let dateCounter = 1;
 
-    for (let i = 0 + day; i < (day + numOfDays); i++) {
-        if(dateCounter === today.getDate() && target().getMonth() === today.getMonth() && target().getFullYear() === today.getFullYear()) {
-            cells[i].classList.toggle('current-day');
-        }
-        cells[i].textContent = dateCounter++;
+
+function renderMonthDates() {
+    const dateTable = document.querySelector('.date-table');
+    dateTable.textContent = "";
+
+    const date = new Date(targetDate.year, targetDate.month);
+    const numOfDays = monthNumToDays(targetDate.month);
+    let dateCounter = 1 - date.getDay();
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    const dateHeaders = document.createElement('tr');
+    dateHeaders.className = "days";
+
+
+    for (let i = 0; i < 7; i++) {
+        const dayHeader = document.createElement('th');
+        dayHeader.textContent =  days[i];
+        dateHeaders.appendChild(dayHeader);
     }
+    dateTable.appendChild(dateHeaders);
+
+
+    while (dateCounter <= numOfDays) {
+        const weekRow = document.createElement('tr');
+
+        for (let i = 0; i < 7; i++) {
+            const dayCell = document.createElement('td');
+            if (dateCounter > 0 && dateCounter <= numOfDays) {
+                dayCell.textContent =  dateCounter;
+            }
+            if (today.getFullYear() == targetDate.year 
+            && today.getMonth() == targetDate.month 
+            && today.getDate() == dateCounter){
+                    dayCell.classList.add("current-day");
+                }
+            dayCell.classList.add("day");
+            addCellEvents(dayCell);
+            weekRow.appendChild(dayCell);
+            dateCounter++;
+        }
+
+        dateTable.appendChild(weekRow);
+    }
+    
+    calendar.appendChild(dateTable);
 }
 
+
 function monthNumToDays(monthNum) {
-    const isBis = (target().getFullYear() % 4 === 0);
+    const isBis = (targetDate.month % 4 === 0);
 
     const days = [31, (isBis ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -90,24 +176,46 @@ function monthNumToString(monthNum) {
     return months[monthNum];
 }
 
-function cleanDateTable() {
-    const cells = document.querySelectorAll('.date-table td');
-
-    for(const cell of cells) {
-        cell.textContent = "";
-
-        if (cell.classList.contains('current-day')) {
-            cell.classList.toggle('current-day');
-        }
-
-        cleanActiveDate();
-    }
-}
 
 function cleanActiveDate() {
     const activeDate = document.querySelector('.active-date');
 
-    if (activeDate) {
-        activeDate.classList.remove('active-date');
-    }
+    const dayEvents = calendar.querySelector('.date-events');
+    if (dayEvents) calendar.removeChild(dayEvents);
+    
+    if (activeDate) activeDate.classList.remove('active-date');
+}
+
+
+function renderEventForm() {
+    const dateEvents = document.querySelector('.events');
+
+    const eventForm = document.createElement('form');
+    eventForm.className = "event-form";
+    const eventDescription = document.createElement('input');
+    const submitBtn = document.createElement('button');
+
+    eventDescription.setAttribute('name', 'description');
+    eventDescription.setAttribute('required', 'true');
+    submitBtn.setAttribute('type', 'submit');
+    submitBtn.textContent = "Add";
+    submitBtn.classList = "submit-btn";
+
+    eventForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        events = [...events, {
+            date: targetDate.date,
+            month: targetDate.month,
+            year: targetDate.year,
+            description: e.target.description.value
+        }]
+    
+        eventForm.remove();
+        renderCalendar();
+    })
+
+
+    eventForm.appendChild(eventDescription);
+    eventForm.appendChild(submitBtn);
+    dateEvents.appendChild(eventForm);
 }

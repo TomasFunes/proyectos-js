@@ -1,7 +1,7 @@
 const startPauseBtn = document.querySelector('.start');
 const reset = document.querySelector('.reset');
-const workCountdown = 0.05 * 60;
-const restCountdown = 0.05*60; 
+const workCountdown = 25 * 60;
+const restCountdown = 5*60; 
 
 
 const pomodoro = {
