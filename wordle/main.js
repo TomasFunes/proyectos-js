@@ -5,6 +5,7 @@ const gameState = {
     word: getWord(),
 }
 
+
 function addLetterEvents(guess) {
     for(const letter of guess.children) {
         letter.addEventListener("click", handleLetterClick);
@@ -14,13 +15,17 @@ function addLetterEvents(guess) {
 
 function start() {
     const keyboard = document.querySelectorAll('.key');
+    const helpBtn = document.querySelector('.help-btn');
 
     addLetterEvents(gameState.activeGuess);
 
     for (const key of keyboard) {
         key.addEventListener("click", handleKeyClick);
     }
+
+    helpBtn.addEventListener("click", handleHelpClick);
 }
+
 
 function end() {
     const keyboard = document.querySelectorAll('.key');
@@ -48,6 +53,43 @@ function mapKeyboard (key) {
 }
 
 
+function handleHelpClick() {
+    const instructions = document.createElement('div');
+    const instTitle = document.createElement('h2');
+    const introText = document.createElement('p');
+    const exampleList = document.createElement('ul');
+    const exOne = document.createElement('li')
+    const exTwo = document.createElement('li')
+    const exThree = document.createElement('li')
+    const closeBtn = document.createElement('button');
+
+    const main = document.querySelector('main');
+
+    instTitle.textContent = "Ayuda";
+    introText.textContent = "Cada intento debe ser una palabra de 5 letras válida. El color de la casilla determina lo siguiente:"
+    exOne.textContent = "Verde - La letra está en la palabra y en el lugar correcto."
+    exTwo.textContent = "Amarillo - La letra está en la palabra, pero en el lugar incorrecto."
+    exThree.textContent = "Gris - La letra no está en la palabra."
+    closeBtn.textContent = "X";
+
+    instructions.className = "instructions";
+
+    closeBtn.addEventListener("click", () => {
+        instructions.remove();
+    })
+
+    exampleList.appendChild(exOne);
+    exampleList.appendChild(exTwo);
+    exampleList.appendChild(exThree);
+
+    instructions.appendChild(closeBtn);
+    instructions.appendChild(instTitle);
+    instructions.appendChild(introText);
+    instructions.appendChild(exampleList);
+
+    main.appendChild(instructions);
+}
+
 function handleKeyClick(event) {
     mapKeyboard(event.currentTarget);
 }
@@ -57,6 +99,7 @@ function handleLetterClick(event) {
     setActiveLetter(event.currentTarget);
 }
 
+
 function setActiveLetter(letter) {
     if(letter) {
         gameState.activeLetter.classList.remove('active-letter');
@@ -65,12 +108,14 @@ function setActiveLetter(letter) {
     }
 }
 
+
 async function wordExists(word) {
     const response = await fetch('word.json');
     const dictionary = await response.json();
 
     return dictionary.includes(word.toLowerCase());
 }
+
 
 async function getWord() {
     const response = await fetch('word.json');
@@ -79,6 +124,7 @@ async function getWord() {
     const word = words[Math.floor(Math.random() * words.length)];
     return word;
 }
+
 
 async function checkGuess() {
     const letters = gameState.activeGuess.children;
@@ -90,7 +136,7 @@ async function checkGuess() {
 
     const exists = await wordExists(stringWord);
     if (!exists) {
-        alert("La palabra no existe (O por lo menos no en el contexto de este juego)");
+        alert("La palabra no se encuentra en el diccionario (No se toman en cuenta plurales)");
         return;
     }
 
@@ -105,6 +151,7 @@ async function checkGuess() {
     }
     checkWinCondition(letters);
 }
+
 
 async function checkWinCondition(letters) {
 
@@ -144,5 +191,6 @@ function setNextGuess() {
     }
 
 }
+
 
 start();
