@@ -136,7 +136,7 @@ async function checkGuess() {
 
     const exists = await wordExists(stringWord);
     if (!exists) {
-        alert("La palabra no se encuentra en el diccionario (No se toman en cuenta plurales)");
+        alert("La palabra no se encuentra en la lista");
         return;
     }
 
@@ -160,11 +160,15 @@ async function checkWinCondition(letters) {
             gameState.guesses++;
             setNextGuess();
             
-            if(gameState.guesses == 6) alert(`Perdiste. La palabra es: ${await gameState.word}`);
+            if(gameState.guesses == 6) {
+                alert(`Perdiste. La palabra es: ${await gameState.word}`);
+                end()
+            }
             return;
         }
     }
     alert(`Correcto! La palabra es: ${await gameState.word}`);
+    end();
     setActiveLetter(null);
 
 }
@@ -186,10 +190,7 @@ function setNextGuess() {
         
         gameState.activeGuess = currentGuess;
         setActiveLetter(currentGuess.firstElementChild);
-    } else {
-        end();
     }
-
 }
 
 
