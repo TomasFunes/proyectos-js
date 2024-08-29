@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Todo App (React, Spring Boot, postgreSQL)",
+        "description": "Aplicacion para organizar listas de tareas",
+        "preview": "images/todo-app.png",
+        "demoLink": "https://todo-app-n6ao.onrender.com/",
+        "repoLink": "https://github.com/TomasFunes/todo-app"
+    },
+    {
+        "name": "Calendario (JS)",
+        "description": "Aplicacion de calendario para organizar eventos",
+        "preview": "images/calendar-app.png",
+        "demoLink": "https://tomasfunes.github.io/proyectos-js/calendar/",
+        "repoLink": "https://github.com/TomasFunes/proyectos-js/tree/main/calendar"
+    },
+    {
+        "name": "Dice battle (JS)",
+        "description": "Juego por turnos basado en clasicos RPG de internet",
+        "preview": "images/dice-battle.png",
+        "demoLink": "https://tomasfunes.github.io/proyectos-js/dice-battle/",
+        "repoLink": "https://github.com/TomasFunes/proyectos-js/tree/main/dice-battle"
+    },
+    {
+        "name": "Wordle (JS)",
+        "description": "El popular juego Wordle para internet",
+        "preview": "images/wordle.png",
+        "demoLink": "https://tomasfunes.github.io/proyectos-js/wordle/",
+        "repoLink": "https://github.com/TomasFunes/proyectos-js/tree/main/wordle"
+    },
+    {
+        "name": "Pomodoro timer (JS)",
+        "description": "Temporizador de pomodoro para sesiones de concentracion",
+        "preview": "images/pomodoro-timer.png",
+        "demoLink": "https://tomasfunes.github.io/proyectos-js/pomodoro-timer/",
+        "repoLink": "https://github.com/TomasFunes/proyectos-js/tree/main/pomodoro-timer"
+    }
+
+]

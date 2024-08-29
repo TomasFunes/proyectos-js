@@ -1,5 +1,5 @@
 const playerOne = {
-    name: "Carlos",
+    name: "Player 1",
     health: 100,
     nameText: document.querySelector('#two .player-name'),
     healthText: document.querySelector('#two .health-text'),
@@ -7,7 +7,7 @@ const playerOne = {
 }
 
 const playerTwo = {
-    name: "Tomas",
+    name: "Player 2",
     health: 100,
     nameText: document.querySelector('#one .player-name'),
     healthText: document.querySelector('#one .health-text'),

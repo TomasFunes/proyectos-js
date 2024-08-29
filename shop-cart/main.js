@@ -1,156 +1,123 @@
-const cartBtn = document.querySelector('.cart-btn');
-const body = document.querySelector('body');
-const container = document.querySelector('.products');
+class Shop {
+    constructor() {
+        this.products = fetch("./products.json")
+            .then(response => response.json());
+        this.cart = new Cart([]);
+        this.cartDisplay = null;
+    }
+
+    static build(){
+        const shop = new Shop();
+        displayShop(shop);
+        return shop;
+    }
+}
+
+class Cart {
+    constructor(products) {
+        this.products = products;
+    }
+}
 
 
-let cartProducts = [];
+function displayProductInfo(shop, product) {
+    const productInfo = createNode("div", {class: "product"},
+        createNode("h3", {}, document.createTextNode(`${product.name}`)),
+        createNode("img", {src: "images/box128x128.png", class: "product-img"}, document.createTextNode(`${product.name}`)),
+        createNode("p", {class: "product-price"}, document.createTextNode(`$${product.price}`)),
+        displayProductForm(shop, product),
+        createNode("p", {class: "product-stock"}, document.createTextNode(
+            `${(product.stock > 0) ? 'Stock: ' + product.stock : 'No stock'}`)),
+    )
+    return productInfo;
+}
 
-const fetchProducts = async () => {
 
-    let response = await fetch('./products.json');
-    let products = await response.json();
+function displayProductForm(shop, product) {
+    const addForm = createNode("form", {class: "add-product-form"},
+        createNode("div", {class: "num-imput"}, 
+            createNode("label", {for: "num-input"}, document.createTextNode("Order : ")),
+            createNode("input", {
+                id: "num-sel",
+                name: "num-sel",
+                type: "number",
+                min: "1",
+                max: `${product.stock}`,
+                required: "true",
+                value: "1"
+            })
+        ),
+        createNode("button", {class: "add-btn", type: "submit"}, document.createTextNode("Add"))
+    )
+
+
+    addForm.addEventListener('submit', (event) => {
+        // "En el JSON, cambiar el stock"
+        event.preventDefault();
+        shop.cart = new Cart([...shop.cart.products, 
+            {
+                name: product.name,
+                amount: event.target['num-sel'].value,
+                price: `$${product.price}` 
+            }
+        ])
+    });
+
+    return addForm;
+}
+
+
+async function displayShop(shop) {
+    const container = document.querySelector('.products');
+    const cartBtn = document.querySelector('.cart-btn');
+
+
+    let products = await shop.products;
 
     for (const product of products) {
-        const productContainer = document.createElement('div');
-        const productName = document.createElement('h3');
-        const productImg = document.createElement('img');
-        const productPrice = document.createElement('p');
-        const productStock = document.createElement('p');
-        const addForm = document.createElement('form');
-
-        // form elements
-        const numInput = document.createElement('div');
-        const inputLabel = document.createElement('label');
-        const input = document.createElement('input');
-        const btnDiv = document.createElement('div');
-        const addBtn = document.createElement('button');
-
-        // form setup
-        inputLabel.setAttribute('for', 'num-input');
-        inputLabel.textContent = 'Order: ';
-
-        input.setAttribute('id', 'num-sel');
-        input.setAttribute('name', 'num-sel');
-        input.setAttribute('type', 'number');
-        input.setAttribute('min', '1');
-        input.setAttribute('max', `${product.stock}`);
-        input.setAttribute('required', 'true');
-        input.setAttribute('value', '1');
-
-        addBtn.textContent = 'Add';
-
-        numInput.className = 'num-input';
-        btnDiv.className = 'add-btn';
-
-        addForm.className = 'add-product-form';
-        addForm.append(numInput, btnDiv);
-
-        numInput.append(inputLabel, input);
-        btnDiv.append(addBtn);
-
-        addForm.addEventListener('submit', (event) => {
-            // "En el JSON, cambiar el stock"
-            event.preventDefault();
-
-            cartProducts = cartProducts.filter(cartProduct => cartProduct.name !== product.name);
-
-            cartProducts = [
-                ...cartProducts,
-                {
-                    name: product.name,
-                    amount: event.target['num-sel'].value,
-                    price: `$${product.price}` 
-                }
-            ]
-        })
-
-        // Other setup
-        productName.textContent = `${product.name}`;
-
-        productImg.setAttribute('src', 'images/box128x128.png');
-        productImg.className = 'product-img';
-
-        productPrice.className = 'product-price';
-        productPrice.textContent = `$${product.price}`;
-
-        productStock.className = 'product-stock';
-        productStock.textContent = `${(product.stock > 0) ? 'Stock: ' + product.stock : 'No stock'}`;
-
-        productContainer.append(productName, productImg, productPrice, addForm, productStock);
-        productContainer.className = 'product';
-
-        container.append(productContainer);
+        const productInfo = displayProductInfo(shop, product);
+        container.append(productInfo);
     }
+
+    cartBtn.addEventListener('click', () => {
+        const body = document.querySelector('body');
+
+        if (shop.cartDisplay) {
+            shop.cartDisplay.remove();
+            shop.cartDisplay = null;
+        } else {
+            console.log(cartBtn.offsetHeight)
+            shop.cartDisplay = createNode("div", {class: "cart", style: `top: ${cartBtn.offsetHeight}px`},
+                ...shop.cart.products.map(product => {
+                    return createNode("div", {class: "cart-product"}, 
+                        createNode("button", {class: "delete-btn"}, document.createTextNode("X")),
+                        createNode("h3", {}, document.createTextNode(product.name)),
+                        createNode("p", {}, document.createTextNode(product.price)),
+                        createNode("p", {}, document.createTextNode(product.amount)),
+                    )
+                })
+            );
+
+            if (shop.cart.products.length == 0) {
+                shop.cartDisplay.textContent = "No products";
+            }
+            body.appendChild(shop.cartDisplay);
+        }
+    })
 } 
 
-fetchProducts();
 
-cartBtn.addEventListener('click', () => {
-    let cart = document.querySelector('.cart');
+function createNode(name, attrs, ...children) {
+    let node = document.createElement(name);
 
-    if (!cart) {
-        cart = document.createElement('div');
-        cart.className = 'cart';
-        body.appendChild(cart);
+    for (let attr of Object.keys(attrs)) {
+        node.setAttribute(attr, attrs[attr]);
     }
-
-    if (!cart.classList.contains('active')) {
-        for (const product of cartProducts) {
-            const productContainer = document.createElement('div');
-            productContainer.className = 'cart-product';
-            const name = document.createElement('h3');
-            const price = document.createElement('p');
-            const amount = document.createElement('p');
-            const deleteBtn = document.createElement('button');
-
-            name.textContent = product.name;
-            price.textContent = product.price;
-            amount.textContent = product.amount;
-            deleteBtn.textContent = 'X';
-
-            name.className = 'product-name';
-            price.className = 'product-price';
-            amount.className = 'product-amount';
-            deleteBtn.className = 'delete-btn';
-
-            deleteBtn.addEventListener('click', () => {
-                const productNode = deleteBtn.parentNode;
-                productNode.remove();
-
-                cartProducts = cartProducts.filter(cartProducts => cartProducts !== product);
-
-                if (cartProducts.length === 0) {
-                    cart.remove();
-                    cartBtn.classList.remove('active');
-                }
-
-
-            })
-
-            productContainer.appendChild(name);
-            productContainer.appendChild(price);
-            productContainer.appendChild(amount);
-            productContainer.appendChild(deleteBtn);
-
-            cart.appendChild(productContainer);
-        }
-
-        if(cartProducts.length === 0) {
-            const msg = document.createElement('p');
-            msg.textContent = 'You can see your chosen products here!';
-            msg.className = 'msg';
-            cart.appendChild(msg);
-        }
-
-        cart.classList.add('active');
-        cartBtn.classList.add('active');
-
-    } else {
-       cart.remove(); 
-       cartBtn.classList.remove('active');
+    for (let child of children) {
+        node.appendChild(child);
     }
+    return node;
+}
 
 
-})
-
-
+Shop.build();

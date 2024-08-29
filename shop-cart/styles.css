@@ -1,7 +1,6 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    margin: auto;
-    margin-top: 5em;
+    margin: 5em auto;
     max-width: 1300px;
 
 }
@@ -69,9 +68,8 @@ header {
 .cart {
     position: fixed;
     background-color: #e0da67;
-    right: 0;
-    top: 68px;
-    padding-left: 10px;
+    right: 0px;
+    padding-right: 10px;
 }
 
 
@@ -88,7 +86,7 @@ h2 {
 }
 
 
-.products {
+.products-container {
     display: grid;
     padding: 10px 20px;
     gap: 40px;
@@ -96,7 +94,7 @@ h2 {
 }
 
 @media screen and (min-width: 840px) {
-    .products {
+    .products-container {
         grid-template-columns: 1fr 1fr;
     }
     
@@ -104,7 +102,7 @@ h2 {
 
 
 @media screen and (min-width: 1280px) {
-    .products {
+    .products-container {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }   
@@ -146,23 +144,18 @@ h2 {
 }
 
 .add-btn {
-    display: flex;
-    height: 40px;
-    width: 30%;
-}
-
-.add-btn button {
+    display: block;
     background-color: hsla(110, 80%, 20%, 1);
     border: 1px solid black;
     color: white;
+
 }
 
-
-.add-btn button:hover {
+.add-btn:hover {
     background-color: hsla(110, 80%, 20%, 0.8);
 }
 
-.add-btn button:active {
+.add-btn:active {
     background-color: hsla(110, 80%, 20%, 1);
 }
 
