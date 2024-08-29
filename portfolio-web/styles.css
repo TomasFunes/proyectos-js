@@ -4,6 +4,10 @@ body {
     background-color: antiquewhite;
 }
 
+h1, h2, h3 {
+    margin: 0;
+}
+
 header {
     background-color: black;
     color: white;
@@ -14,7 +18,8 @@ header {
 
 main {
     max-width: 980px;
-    margin: auto;
+    margin: 2rem auto;
+    padding: 2rem 0;
     background-color: white;
 }
 
@@ -24,3 +29,25 @@ main {
     text-align: center;
     margin-bottom: 5rem;
 }
+
+footer {
+    background-color: black;
+    color: white;
+    padding: 1rem;
+}
+
+footer ul {
+    margin: 0;
+    list-style: none;
+}
+
+footer a{
+    color: white;
+}
+
+footer li,
+address {
+    margin-bottom: .5rem;
+    
+}
+
