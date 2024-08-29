@@ -31,6 +31,7 @@ const buildProjectCard = async (project) => {
     description.textContent = project.description;
 
     preview.setAttribute("src", project.preview);
+    preview.className = "preview";
 
     demoLink.setAttribute("href", project.demoLink);
     demoLink.setAttribute("target", "_blank");
